@@ -56,17 +56,17 @@ The [model.py](./model.py) file contains the code for training and saving the co
 
 #### 1. Architecture code
 
-The code describing the CNN architecture can be found within the `instantiate_model(learningRate)` function in lines 34 -- 63 of the [model.py](./model.py) file.
+The code describing the CNN architecture can be found within the `instantiate_model(learningRate)` function in lines 28 -- 57 of the [model.py](./model.py) file.
 
 #### 2. Attempts to reduce overfitting in the model
 
 As can be seen from the summary printout in the next section, this model contains dropout layers in order to reduce overfitting, each with drop probability 0.25 and 0.5, respectively.
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
-The model used an Adam optimiser. The learning rate proved to be a critical parameter to ensure the eventual success of the autonomously driven laps. Whilst values of 0.01 and 0.001 yielded promising and partially successful results, I eventually settled on 0.00001 as being the best choice.
+The model uses an Adam optimiser. The learning rate proved to be a critical parameter to ensure the eventual success of the autonomously driven laps. Whilst values of 0.01 and 0.001 yielded promising and partially successful results, I eventually settled on 0.00001 as being the best choice.
 
 #### 4. Training considerations
 

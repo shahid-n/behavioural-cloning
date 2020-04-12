@@ -15,7 +15,6 @@ from io import BytesIO
 from keras.models import load_model
 import h5py
 from keras import __version__ as keras_version
-# import keras.backend as kbe
 import bespokeLoss as BL
 
 import tensorflow as tf
@@ -25,12 +24,6 @@ config.gpu_options.allow_growth = True  # dynamically grow the memory used on th
 config.log_device_placement = True  # to log device placement (on which device the operation ran)
 sess = tf.compat.v1.Session(config=config)
 set_session(sess)  # set this TensorFlow session as the default session for Keras
-
-# def bespoke_loss(yTrue, yPred):
-    # sqErr = kbe.square(yPred - yTrue)
-    # penalty = kbe.exp(kbe.square(yTrue))
-    
-    # return kbe.dot(kbe.transpose(sqErr), penalty)
 
 sio = socketio.Server()
 app = Flask(__name__)
