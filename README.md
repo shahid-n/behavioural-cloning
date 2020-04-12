@@ -4,9 +4,9 @@
 
 The goals of this project are as follows.
 * Use the Udacity Unity simulator to collect data of good driving behaviour
-* Build a convolution neural network in Keras that predicts steering angles from images
-* Train and validate the model with a training and validation set
-* Test that the model successfully drives around track one without leaving the road
+* Build a convolutional neural network in Keras that predicts steering angles from in-simulation camera images
+* Train and validate the model with a suitably curated and augmented training and validation set
+* Test that the model successfully drives round Track 1 without leaving the road
 * Present some observations, lessons learnt and conclusions
 
 
