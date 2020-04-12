@@ -181,4 +181,6 @@ _Equipment and setup:_ I personally recommend driving in autonomous mode on a lo
 
 I have every intention of revisiting this project in the very near future. The first order of business is to augment more track 2 driving and recovery data and attempt to help the model complete this track successfully.
 
+_Look-ahead parameter:_ another major topic is exploring options to address the time lags occurring in the processing and execution steps. To this end, during training, instead of feeding the current steering angle, it might be a better idea to look a bit further ahead by a few frames, in anticipation of the ever existent (but likely nonuniform) processing lag. Hence, by implementing a tuneable _look-ahead_ parameter to advance the steering angle labels by a fixed number of frames, it might be possible to improve the model's performance by helping it steer more proactively and stay close to the centre of the path at all times.
+
 I also see numerous opportunities for refinement, ranging from architecture tweaks, exploring the right choices for critical hyperparameters, all the way down to the specifics of identifying the best kind of raw data and augmentation strategies, not to mention the best loss functions and optimisers based on the application or task / goal at hand.
