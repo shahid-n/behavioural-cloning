@@ -42,7 +42,7 @@ This project includes the following files.
 #### 2. Model Execution
 Using the Udacity provided simulator and the linked [drive.py](./drive.py) file, the car can be driven autonomously around the track by executing the following command in a terminal.
 ```sh
-python drive.py model.h5
+python drive.py ./output/model.h5
 ```
 Below is a preview of the simulation video capture; the full video is available [here](./output/output_video.mp4)
 
