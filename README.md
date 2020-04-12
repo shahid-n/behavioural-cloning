@@ -80,7 +80,7 @@ Furthermore, in order to reduce overfitting on a single track and to help the mo
 
 Fairly early on in the project, I settled upon the well known [End to End Learning for Self-Driving Cars](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf) paper as the basis for my model architecture, after making slight modifications to accommodate the image resolution, aspect ratio and certain specifics relating to my overall training strategy for this project.
 
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
+At the end of the process, the vehicle is able to drive autonomously round the track without leaving the road.
 
 #### 2. Final Model Architecture
 
