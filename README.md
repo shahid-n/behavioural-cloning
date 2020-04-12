@@ -32,31 +32,31 @@ The goals of this project are as follows.
 #### 1. Files needed to review model performance
 
 This project includes the following files.
-* [model.py] containing the script to create and train the model
-* [drive.py] for driving the car in autonomous mode
-* [bespokeLoss.py], which defines a bespoke exponentially weighted loss function to help with steering more assertively round bends
-* [model.h5] containing a trained convolution neural network
-* [README.md] summarising the results
-* [model_weights.h5] containing just the weights from the trained network above (useful for running the training script `model.py`)
+* [model.py](./model.py) containing the script to create and train the model
+* [drive.py](./drive.py) for driving the car in autonomous mode
+* [bespokeLoss.py](./bespokeLoss.py), which defines a bespoke exponentially weighted loss function to help with steering more assertively round bends
+* [model.h5](./output/model.h5) containing a trained convolution neural network
+* [README.md](./README.md) summarising the results
+* [model_weights.h5](./output/model_weights.h5) containing just the weights from the trained network above (useful for running the training script `model.py`)
 
 #### 2. Model Execution
-Using the Udacity provided simulator and the linked [drive.py](https://github.com/shahid-n/behavioural-cloning/drive.py) file, the car can be driven autonomously around the track by executing the following command in a terminal.
+Using the Udacity provided simulator and the linked [drive.py](./drive.py) file, the car can be driven autonomously around the track by executing the following command in a terminal.
 ```sh
 python drive.py model.h5
 ```
-Below is a preview of the simulation video capture; the full video is available [here](https://github.com/shahid-n/behavioural-cloning/output/output_video.mp4)
+Below is a preview of the simulation video capture; the full video is available [here](./output/output_video.mp4)
 
 ![alt text][replayGif]
 
 #### 3. Code for model instantiation and training
 
-The [model.py](https://github.com/shahid-n/behavioural-cloning/model.py) file contains the code for training and saving the convolutional neural network. The file shows the pipeline used for training and validating the model, and it contains comments to explain how the code works.
+The [model.py](./model.py) file contains the code for training and saving the convolutional neural network. The file shows the pipeline used for training and validating the model, and it contains comments to explain how the code works.
 
 ### Model Architecture and Training Strategy
 
 #### 1. Architecture code
 
-The code describing the CNN architecture can be found within the `instantiate_model(learningRate)` function in lines 34 -- 63 of the [model.py](https://github.com/shahid-n/behavioural-cloning/model.py) file.
+The code describing the CNN architecture can be found within the `instantiate_model(learningRate)` function in lines 34 -- 63 of the [model.py](./model.py) file.
 
 #### 2. Attempts to reduce overfitting in the model
 
@@ -131,19 +131,20 @@ Shown below is a visualisation of the architecture (note: the layer dimensions a
 #### 3. Training strategy: "driving the right way"
 
 It became apparent early on that capturing multiple laps with the correct or proper driving form was not going to be sufficient. There are manifold reasons for this, and hence the following measures were taken to ensure proper training of the model.
-1. In rder to help the model focus only on the most critical part of the image, the raw input was immediately cropped to only show the track and a small part of the horizon in the input stage; this is illustrated in the images below.
+1. In order to help the model focus only on the most critical part of the image, the raw input was immediately cropped to only show the track and a small part of the horizon in the input stage; this is illustrated in the images below.
 ![alt text][cropEg]
 ![alt text][cropped]
 2. Inherent in the training process is the assumption that a snapshot of the track with its associated steering angle data corresponds to a specific instant in time -- whilst undoubtedly true, this fact poses problems when attempting to replicate this by running the model in autonomous mode. The crux of the problem is that even on a powerful and capable machine, there is inevitably some lag time between each of the image processing, steering angle prediction and actual execution of the requested steering input. Consequently, the model is perpetually behind where it needs to be, and the overall setup does not allow for perfect replication of its predictions.
 3. Primarily staying near the centre of the track during the data collection phase would mean that the model is given little to no information on how to recover when it is too far off-centre and dangerously close to veering off-track.
 4. The lack of any explicit information or training on the dynamics of driving -- or, for that matter, on how to detect the road curvature up ahead -- means that without the correct training strategy predicated on a carefully curated data set, it would be very difficult to teach the model any recovery tactics to help it perform course corrections, let alone imbuing it with anticipatory behaviour.
-5. The three preceding points notwithstanding, there are certain techniques which could be adopted in addition to simply growing the share of images depicting how to properly negotiate curves, and to get back on track if the model begins to drift off course. One measure that was adopted was to change the loss metric from the mean squared error to one which is weighted exponentially in terms of the magnitude of the true steering angle in the original training run -- in other words, by placing the square of the training angle as the main argument in the exponential envelope, we are essentially telling the model during training that veering off-course whilst driving along a curved section incurs a significantly greater penalty than drifting on a straight stretch. This bespoke loss function is defined in the file [bespokeLoss.py](https://github.com/shahid-n/behavioural-cloning/bespokeLoss.py) included in this project, and this function is called in lines 55 and 130 of `model.py` and the modified `drive.py`, respectively.
+5. The three preceding points notwithstanding, there are certain techniques which could be adopted in addition to simply growing the share of images depicting how to properly negotiate curves, and to get back on track if the model begins to drift off course. One measure that was adopted was to change the loss metric from the mean squared error to one which is weighted exponentially in terms of the magnitude of the true steering angle in the original training run -- in other words, by placing the square of the training angle as the main argument in the exponential envelope, we are essentially telling the model during training that veering off-course whilst driving along a curved section incurs a significantly greater penalty than drifting on a straight stretch. This bespoke loss function is defined in the file [bespokeLoss.py](./bespokeLoss.py) included in this project, and this function is called in lines 55 and 130 of `model.py` and the modified `drive.py`, respectively.
 6. The fifth point above can significantly ease the burden on the data collection exercise by placing the emphasis back on primarily collecting examples of _driving the right way_ -- consequently, in the light of a suitable choice of loss function, training a neural network to drive is not so different from teaching a human how to drive properly and safely, after all.
 7. As can be seen from the model architecture summary table above, two dropout layers were introduced in-between the dense layers, with drop probabilities of 0.25 and 0.5, respectively. This helped combat over-fitting to the data corresponding to any single track.
 8. Moreover, the data sets were augmented in two ways. First, images were added from the left and right camera views in addition to the centre camera, and synthetic steering values corresponding to each left and right image were augmented to the nominal steering data corresponding to the centre images. An example set of screenshots is shown below.
 ![alt text][left]
 ![alt text][centre]
 ![alt text][right]
+
 Next, every image was also mirrored-left to right to simulate driving in the opposite direction -- of course, this meant that the steering angles also had to be negated. The flipped images were in addition to raw data collected whilst driving the "wrong way" along the track, as it were.
 ![alt text][flipEg]
 ![alt text][flipped]
@@ -158,9 +159,9 @@ As per usual practice, the augmented data were split into 80 % training and 20 %
 
 This was an exceptionally challenging project, and required the utilisation of many tricks and techniques to finally yield a model and associated training regimen that resulted in a successful lap round Track 1 in autonomous mode. Some of the keys to my personal success in this project are collected here in case others find them useful.
 * _Data collection:_ perhaps one of the most surprising revelations was the most suitable input device for driving the car manually. For the beta simulator, my recommendation is to pick a device in the following order of preference.
-1. touchpad
-2. mouse
-3. joystick or gamepad such as the Wii U Pro controller
+:1. touchpad
+:2. mouse
+:3. joystick or gamepad such as the Wii U Pro controller
 In the case of the original, older version of the simulator, a joystick is perhaps the best choice -- I was not able to configure a mouse or touchpad to steer in that version.
 * _Model architecture:_ the biggest surprise here was the fact that a few convolutional and dense layers were sufficient to get the job done, without the need for any esoteric activation functions or nonlinearities.
 * _Training strategy:_ I had some trouble creating my own recovery data for the additional tracks, so I opted to instead improve the training process itself by guiding the model to steer more assertively when going round bends -- this was achieved by introducing an exponentially weighted loss function which grew in accordance with the exponential of the square of the steering angle. This did not eliminate the need for recovery example data by any means, but certainly helped obviate the need to skew the data more towards sections that had lots of curves -- in the case of track 1, this would have necessitated discarding a lot of perfectly good data.
