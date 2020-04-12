@@ -15,12 +15,27 @@ from io import BytesIO
 from keras.models import load_model
 import h5py
 from keras import __version__ as keras_version
+# import keras.backend as kbe
+import bespokeLoss as BL
+
+import tensorflow as tf
+from tensorflow.compat.v1.keras.backend import set_session
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+config.log_device_placement = True  # to log device placement (on which device the operation ran)
+sess = tf.compat.v1.Session(config=config)
+set_session(sess)  # set this TensorFlow session as the default session for Keras
+
+# def bespoke_loss(yTrue, yPred):
+    # sqErr = kbe.square(yPred - yTrue)
+    # penalty = kbe.exp(kbe.square(yTrue))
+    
+    # return kbe.dot(kbe.transpose(sqErr), penalty)
 
 sio = socketio.Server()
 app = Flask(__name__)
 model = None
 prev_image_array = None
-
 
 class SimplePIController:
     def __init__(self, Kp, Ki):
@@ -119,7 +134,7 @@ if __name__ == '__main__':
         print('You are using Keras version ', keras_version,
               ', but the model was built using ', model_version)
 
-    model = load_model(args.model)
+    model = load_model(args.model, custom_objects={'bespoke_loss': BL.bespoke_loss})
 
     if args.image_folder != '':
         print("Creating image folder at {}".format(args.image_folder))
