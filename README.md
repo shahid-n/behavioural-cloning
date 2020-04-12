@@ -162,7 +162,7 @@ As per usual practice, the augmented data were split into 80 % training and 20 %
 
 This was an exceptionally challenging project, and required the utilisation of many tricks and techniques to finally yield a model and associated training regimen that resulted in a successful lap round Track 1 in autonomous mode. Some of the keys to my personal success in this project are collected here in case others find them useful.
 
-_Data collection:_ perhaps one of the most surprising revelations was the most suitable input device for driving the car manually. For the beta simulator, my recommendation is to pick a device in the following order of preference.
+_Data collection:_ perhaps one of the most surprising revelations was the best input device for driving the car manually. For the beta simulator, my recommendation is to pick a device in the following order of preference.
 1. touchpad
 2. mouse
 3. joystick or gamepad such as the Wii U Pro controller
@@ -171,7 +171,7 @@ In the case of the original, older version of the simulator, a joystick is perha
 
 _Model architecture:_ the biggest surprise here was the fact that a few convolutional and dense layers were sufficient to get the job done, without the need for any esoteric activation functions or nonlinearities.
 
-_Training strategy:_ I had some trouble creating my own recovery data for the additional tracks, so I opted to instead improve the training process itself by guiding the model to steer more assertively when going round bends -- this was achieved by introducing an exponentially weighted loss function which grew in accordance with the exponential of the square of the steering angle. This did not eliminate the need for recovery example data by any means, but certainly helped obviate the need to skew the data more towards sections that had lots of curves -- in the case of track 1, this would have necessitated discarding a lot of perfectly good data.
+_Training strategy:_ I had some trouble creating my own recovery data for the additional tracks, so I opted instead to improve the training process itself by guiding the model to steer more assertively when going round bends -- this was achieved by introducing an exponentially weighted loss function which grew in accordance with the exponential of the square of the steering angle. This did not eliminate the need for recovery example data by any means, but certainly helped obviate the need to skew the data more towards sections that had lots of curves -- in the case of track 1, this would have necessitated discarding a lot of perfectly good data.
 
 _Equipment and setup:_ I personally recommend driving in autonomous mode on a local machine equipped with a GPU rather than on the workspace, in order to minimise lag times. Unfortunately even a small amount of processing lag can have a noticeable destabilising effect in many scenarios during autonomous driving mode, since the model is just not very robust even after many epochs of training with all of the varied data collecting and augmenting methods described previously.
 
